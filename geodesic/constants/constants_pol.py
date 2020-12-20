@@ -28,12 +28,23 @@ def pol_energy(aa, slr, ecc):
         slr2 = slr * slr
         slr4 = slr2 * slr2
         mp.prec += 10
-        return sqrt(-((slr * (aa4 * (-1 + ecc2)**2 +
-                    (-4 * ecc2 + (-2 + slr)**2) * slr2 + 
-                    2 * aa2 * slr * (-2 + slr + ecc2 * (2 + slr)))) /
-                    (aa4 * (-1 + ecc2)**2 * (-1 + ecc2 - slr) +
-                     (3 + ecc2 - slr) * slr4 - 2 * aa2 * slr2 *
-                     (-1 - ecc4 + slr + ecc2*(2 + slr)))))
+        return sqrt(
+            -(
+                (
+                    slr
+                    * (
+                        aa4 * (-1 + ecc2) ** 2
+                        + (-4 * ecc2 + (-2 + slr) ** 2) * slr2
+                        + 2 * aa2 * slr * (-2 + slr + ecc2 * (2 + slr))
+                    )
+                )
+                / (
+                    aa4 * (-1 + ecc2) ** 2 * (-1 + ecc2 - slr)
+                    + (3 + ecc2 - slr) * slr4
+                    - 2 * aa2 * slr2 * (-1 - ecc4 + slr + ecc2 * (2 + slr))
+                )
+            )
+        )
     finally:
         mp.prec = prec
 
@@ -60,11 +71,21 @@ def pol_carter_const(aa, slr, ecc):
         slr2 = slr * slr
         slr4 = slr2 * slr2
         mp.prec += 10
-        return -((slr2 * (aa4 * (-1 + ecc2)**2 + slr4 + 
-                 2 * aa2 * slr * (-2 + slr + ecc2 * (2 + slr)))) /
-                 (aa4 * (-1 + ecc2)**2 *
-                  (-1 + ecc2 - slr) + (3 + ecc2 - slr) * slr4 - 
-                 2 * aa2 * slr2 * (-1 - ecc4 + slr + ecc2 * (2 + slr))))
+        return -(
+            (
+                slr2
+                * (
+                    aa4 * (-1 + ecc2) ** 2
+                    + slr4
+                    + 2 * aa2 * slr * (-2 + slr + ecc2 * (2 + slr))
+                )
+            )
+            / (
+                aa4 * (-1 + ecc2) ** 2 * (-1 + ecc2 - slr)
+                + (3 + ecc2 - slr) * slr4
+                - 2 * aa2 * slr2 * (-1 - ecc4 + slr + ecc2 * (2 + slr))
+            )
+        )
     finally:
         mp.prec = prec
 

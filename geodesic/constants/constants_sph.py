@@ -24,7 +24,7 @@ def spherical_energy(aa, slr, x):
         prec = mp.prec
         mp.prec += 10
 
-        slrm2 = (-2 + slr)**2
+        slrm2 = (-2 + slr) ** 2
         slr2 = slr * slr
         slr3 = slr * slr2
         slr4 = slr * slr3
@@ -41,25 +41,41 @@ def spherical_energy(aa, slr, x):
         x2m12 = x2m1 * x2m1
 
         mp.prec += 10
-        return (
-            sqrt(((-3 + slr) * slrm2 * slr5 -
-                 2 * aa5 * x * x2m1 * sqrt(slr3 + aa2 * slr * x2m1) +
-                 aa4 * slr2 * x2m1 * (4 - 5 * slr * (-1 + x2) +
-                 3 * slr2 * x2m1) - aa6 * x2m12 *
-                 (x2 + slr2 * x2m1 - slr * (1 + 2 * x2)) +
-                 aa2 * slr3 * (4 - 4 * x2 + slr * (12 - 7 * x2) -
-                               3 * slr3 * (-1 + x2) +
-                               slr2 * (-13 + 10 * x2)) +
-                 aa * (-2 * slr**4.5 * x * sqrt(slr2 + aa2 * x2m1) +
-                       4 * slr3 * x * sqrt(slr3 + aa2 * slr * x2m1)) +
-                 2 * aa3 * (2 * slr * x * x2m1 *
-                            sqrt(slr3 + aa2 * slr * x2m1) -
-                            x3 * sqrt(slr7 + aa2 * slr5 * x2m1))) /
-                 ((slr2 - aa2 * x2m1) *
-                 ((-3 + slr)**2 * slr4 - 2 * aa2 * slr2 *
-                  (3 + 2 * slr - 3 * x2 + slr2 * x2m1) +
-                  aa4 * x2m1 * (-1 + x2 + slr2 * x2m1 -
-                  2 * slr * (1 + x2)))))
+        return sqrt(
+            (
+                (-3 + slr) * slrm2 * slr5
+                - 2 * aa5 * x * x2m1 * sqrt(slr3 + aa2 * slr * x2m1)
+                + aa4 * slr2 * x2m1 * (4 - 5 * slr * (-1 + x2) + 3 * slr2 * x2m1)
+                - aa6 * x2m12 * (x2 + slr2 * x2m1 - slr * (1 + 2 * x2))
+                + aa2
+                * slr3
+                * (
+                    4
+                    - 4 * x2
+                    + slr * (12 - 7 * x2)
+                    - 3 * slr3 * (-1 + x2)
+                    + slr2 * (-13 + 10 * x2)
+                )
+                + aa
+                * (
+                    -2 * slr ** 4.5 * x * sqrt(slr2 + aa2 * x2m1)
+                    + 4 * slr3 * x * sqrt(slr3 + aa2 * slr * x2m1)
+                )
+                + 2
+                * aa3
+                * (
+                    2 * slr * x * x2m1 * sqrt(slr3 + aa2 * slr * x2m1)
+                    - x3 * sqrt(slr7 + aa2 * slr5 * x2m1)
+                )
+            )
+            / (
+                (slr2 - aa2 * x2m1)
+                * (
+                    (-3 + slr) ** 2 * slr4
+                    - 2 * aa2 * slr2 * (3 + 2 * slr - 3 * x2 + slr2 * x2m1)
+                    + aa4 * x2m1 * (-1 + x2 + slr2 * x2m1 - 2 * slr * (1 + x2))
+                )
+            )
         )
     finally:
         mp.prec = prec
@@ -91,11 +107,9 @@ def spherical_ang_momentum(En, aa, slr, x):
         g = 2 * aa * slr
         d = (aa2 + (-2 + slr) * slr) * (slr2 - aa2 * (-1 + x2))
         h = ((-2 + slr) * slr - aa2 * (-1 + x2)) / x2
-        f = (slr**4 + aa2 * (slr * (2 + slr) - (aa2 + (-2 + slr) * slr) *
-             (-1 + x2)))
+        f = slr ** 4 + aa2 * (slr * (2 + slr) - (aa2 + (-2 + slr) * slr) * (-1 + x2))
 
-        return (-(En * g) +
-                sqrt((-(d * h) + En**2 * (g**2 + f * h)) / x2) * x) / h
+        return (-(En * g) + sqrt((-(d * h) + En ** 2 * (g ** 2 + f * h)) / x2) * x) / h
     finally:
         mp.prec = prec
 
@@ -124,8 +138,7 @@ def gen_carter_const(En, Lz, aa, slr, ecc, x):
         mp.prec += 10
         zm2 = zm * zm
         mp.prec += 10
-        return (zm2 * (aa * aa * (1 - En * En) + Lz * Lz /
-                (1 - zm2)))
+        return zm2 * (aa * aa * (1 - En * En) + Lz * Lz / (1 - zm2))
     finally:
         mp.prec = prec
 

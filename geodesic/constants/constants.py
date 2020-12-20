@@ -31,7 +31,7 @@ def calc_constants(aa, slr, ecc, x):
         return calc_sc_constants(slr, ecc, x)
     elif x == 0:
         return calc_pol_constants(aa, slr, ecc)
-    elif x**2 == 1:
+    elif x ** 2 == 1:
         return calc_eq_constants(aa, slr, ecc, x)
     elif ecc == 0:
         return calc_sph_constants(aa, slr, x)

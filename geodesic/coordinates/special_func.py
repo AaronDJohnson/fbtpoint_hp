@@ -11,7 +11,7 @@ def jacobi_am_f(x, m):
         x = ctx.convert(x)
         m = ctx.convert(m)
         if not isinstance(x, ctx.mpf) or not isinstance(m, ctx.mpf):
-            raise ValueError('arguments must be real')
+            raise ValueError("arguments must be real")
         if abs(m) == 1:
             # gd(x)
             ctx.prec += 10
@@ -23,16 +23,16 @@ def jacobi_am_f(x, m):
             # Real values needed for atan2; as per "Handbook of Elliptic
             # Integrals for Engineers and Scientists" 121.02, sn is real for
             # real x. The imaginary components can thus be safely discarded.
-            snx = ctx.ellipfun('sn', x, m).real
-            cnx = ctx.ellipfun('cn', x, m).real
+            snx = ctx.ellipfun("sn", x, m).real
+            cnx = ctx.ellipfun("cn", x, m).real
             ctx.prec += 10
             return ctx.atan2(snx, cnx)
         else:
             ctx.prec += 10
             K = ctx.ellipk(m)
             if abs(x) <= K:
-                snx = ctx.ellipfun('sn', x, m).real
-                cnx = ctx.ellipfun('cn', x, m).real
+                snx = ctx.ellipfun("sn", x, m).real
+                cnx = ctx.ellipfun("cn", x, m).real
                 ctx.prec += 10
                 return ctx.atan2(snx, cnx)
             else:
@@ -50,8 +50,8 @@ def jacobi_am_f(x, m):
                 ctx.prec += 10
                 # z (and therefore sn(z, m) and cn(z, m)) is real because K(m)
                 # is real for abs(m) <= 1.
-                snz = ctx.ellipfun('sn', z, m).real
-                cnz = ctx.ellipfun('cn', z, m).real
+                snz = ctx.ellipfun("sn", z, m).real
+                cnz = ctx.ellipfun("cn", z, m).real
                 ctx.prec += 10
                 return ctx.atan2(snz, cnz) + npi
     finally:

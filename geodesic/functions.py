@@ -124,8 +124,9 @@ def mino_freqs(aa, slr, ecc, x, digits, M=1):
         x = mpf(str(x))
         En, Lz, Q = calc_constants(aa, slr, ecc, x)
         r1, r2, r3, r4 = radial_roots(En, Q, aa, slr, ecc, M)
-        ups_r, ups_theta, ups_phi, gamma = mino_freqs(r1, r2, r3, r4, En, Lz,
-                                                      Q, aa, slr, ecc, x)
+        ups_r, ups_theta, ups_phi, gamma = mino_freqs(
+            r1, r2, r3, r4, En, Lz, Q, aa, slr, ecc, x
+        )
         return ups_r, ups_theta, ups_phi, gamma
     finally:
         mp.prec = prec
@@ -154,10 +155,12 @@ def boyer_freqs(aa, slr, ecc, x, digits):
     x = mpf(str(x))
     En, Lz, Q = mp_calc_constants(aa, slr, ecc, x)
     r1, r2, r3, r4 = mp_radial_roots(En, Q, aa, slr, ecc, M)
-    ups_r, ups_theta, ups_phi, gamma = mp_mino_freqs(r1, r2, r3, r4, En, Lz,
-                                                     Q, aa, slr, ecc, x)
-    omega_r, omega_theta, omega_phi = mp_boyer_freqs(ups_r, ups_theta, ups_phi,
-                                                     gamma, aa, slr, ecc, x, M)
+    ups_r, ups_theta, ups_phi, gamma = mp_mino_freqs(
+        r1, r2, r3, r4, En, Lz, Q, aa, slr, ecc, x
+    )
+    omega_r, omega_theta, omega_phi = mp_boyer_freqs(
+        ups_r, ups_theta, ups_phi, gamma, aa, slr, ecc, x, M
+    )
     return omega_r, omega_theta, omega_phi
 
 
@@ -185,10 +188,12 @@ def find_omega(en, em, kay, aa, slr, ecc, x, digits):
     x = mpf(str(x))
     En, Lz, Q = mp_calc_constants(aa, slr, ecc, x)
     r1, r2, r3, r4 = mp_radial_roots(En, Q, aa, slr, ecc, M)
-    ups_r, ups_theta, ups_phi, gamma = mp_mino_freqs(r1, r2, r3, r4, En, Lz,
-                                                     Q, aa, slr, ecc, x)
-    omega_r, omega_theta, omega_phi = mp_boyer_freqs(ups_r, ups_theta, ups_phi,
-                                                     gamma, aa, slr, ecc, x, M)
+    ups_r, ups_theta, ups_phi, gamma = mp_mino_freqs(
+        r1, r2, r3, r4, En, Lz, Q, aa, slr, ecc, x
+    )
+    omega_r, omega_theta, omega_phi = mp_boyer_freqs(
+        ups_r, ups_theta, ups_phi, gamma, aa, slr, ecc, x, M
+    )
     omega = en * omega_r + em * omega_phi + kay * omega_theta
     return omega
 
@@ -212,7 +217,7 @@ def coordinates(psi, chi, aa, slr, ecc, x):
         theta (mpf): theta coordinate
         phi (mpf): phi coordinate
     """
-    if x**2 == 1:
+    if x ** 2 == 1:
         chi = 0  # equatorial orbits don't need chi
     try:
         mp.dps = digits
@@ -226,11 +231,29 @@ def coordinates(psi, chi, aa, slr, ecc, x):
         x = mpf(str(x))
         En, Lz, Q = calc_constants(aa, slr, ecc, x)
         r1, r2, r3, r4 = radial_roots(En, Q, aa, slr, ecc, M)
-        ups_r, ups_theta, ups_phi, gamma = mino_freqs(r1, r2, r3, r4, En, Lz,
-                                                      Q, aa, slr, ecc, x)
-        t, r, theta, phi = calc_coords(psi, chi, ups_r, ups_theta, ups_phi, gamma, r1, r2, r3,
-                                       r4, zp, zm, En, Lz, aa, slr, ecc, x)
+        ups_r, ups_theta, ups_phi, gamma = mino_freqs(
+            r1, r2, r3, r4, En, Lz, Q, aa, slr, ecc, x
+        )
+        t, r, theta, phi = calc_coords(
+            psi,
+            chi,
+            ups_r,
+            ups_theta,
+            ups_phi,
+            gamma,
+            r1,
+            r2,
+            r3,
+            r4,
+            zp,
+            zm,
+            En,
+            Lz,
+            aa,
+            slr,
+            ecc,
+            x,
+        )
         return t, r, theta, phi
     finally:
         mp.prec = prec
-    

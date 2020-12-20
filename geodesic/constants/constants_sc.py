@@ -16,10 +16,7 @@ def calc_sc_energy(slr, ecc, x):
         x2 = x * x
 
         mp.prec += 10
-        En = sqrt(
-            (-4 * ecc2 + (-2 + slr)**2) /
-            (slr * (-3 - ecc2 + slr))
-        )
+        En = sqrt((-4 * ecc2 + (-2 + slr) ** 2) / (slr * (-3 - ecc2 + slr)))
         return En
     finally:
         mp.prec = prec
@@ -84,10 +81,7 @@ def calc_sc_constants(slr, ecc, x):
         x2 = x * x
 
         mp.prec += 10
-        En = sqrt(
-            (-4 * ecc2 + (-2 + slr)**2) /
-            (slr * (-3 - ecc2 + slr))
-        )
+        En = sqrt((-4 * ecc2 + (-2 + slr) ** 2) / (slr * (-3 - ecc2 + slr)))
         Lz = (slr * x) / sqrt(-3 - ecc2 + slr)
         Q = (slr2 * (-1 + x2)) / (3 + ecc2 - slr)
 

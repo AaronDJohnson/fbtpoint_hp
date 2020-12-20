@@ -36,10 +36,10 @@ def calc_rq(qr, r1, r2, r3, r4):
     pi = mp.pi
     kr = ((r1 - r2) * (r3 - r4)) / ((r1 - r3) * (r2 - r4))
 
-    sn = ellipfun('sn')
-    return ((-(r2*(r1 - r3)) +
-            (r1 - r2)*r3*sn((qr*ellipk(kr))/pi,kr)**2)/
-            (-r1 + r3 + (r1 - r2)*sn((qr*ellipk(kr))/pi,kr)**2))
+    sn = ellipfun("sn")
+    return (
+        -(r2 * (r1 - r3)) + (r1 - r2) * r3 * sn((qr * ellipk(kr)) / pi, kr) ** 2
+    ) / (-r1 + r3 + (r1 - r2) * sn((qr * ellipk(kr)) / pi, kr) ** 2)
 
 
 def calc_zq(qz, zp, zm, En, aa):
@@ -56,11 +56,11 @@ def calc_zq(qz, zp, zm, En, aa):
     Returns:
         zq (float)
     """
-    ktheta = (aa**2*(1 - En**2)*zm**2)/zp**2
-    sn = ellipfun('sn')
+    ktheta = (aa ** 2 * (1 - En ** 2) * zm ** 2) / zp ** 2
+    sn = ellipfun("sn")
     pi = mp.pi
 
-    return zm*sn((2*(pi/2. + qz)*ellipk(ktheta))/pi, ktheta)
+    return zm * sn((2 * (pi / 2.0 + qz) * ellipk(ktheta)) / pi, ktheta)
 
 
 def calc_psi_r(qr, r1, r2, r3, r4):
@@ -78,8 +78,8 @@ def calc_psi_r(qr, r1, r2, r3, r4):
         psi_r (float)
     """
     pi = mp.pi
-    kr = ((r1 - r2)*(r3 - r4))/((r1 - r3)*(r2 - r4))
-    return am((qr*ellipk(kr))/pi, kr)
+    kr = ((r1 - r2) * (r3 - r4)) / ((r1 - r3) * (r2 - r4))
+    return am((qr * ellipk(kr)) / pi, kr)
 
 
 def calc_t_r(qr, r1, r2, r3, r4, En, Lz, aa, M=1):
@@ -105,27 +105,54 @@ def calc_t_r(qr, r1, r2, r3, r4, En, Lz, aa, M=1):
     pi = mp.pi
     psi_r = calc_psi_r(qr, r1, r2, r3, r4)
 
-    kr = ((r1 - r2)*(r3 - r4))/((r1 - r3)*(r2 - r4))
+    kr = ((r1 - r2) * (r3 - r4)) / ((r1 - r3) * (r2 - r4))
 
-    rp = M + sqrt(-aa**2 + M**2)
-    rm = M - sqrt(-aa**2 + M**2)
+    rp = M + sqrt(-(aa ** 2) + M ** 2)
+    rm = M - sqrt(-(aa ** 2) + M ** 2)
 
-    hr = (r1 - r2)/(r1 - r3)
-    hp = ((r1 - r2)*(r3 - rp))/((r1 - r3)*(r2 - rp))
-    hm = ((r1 - r2)*(r3 - rm))/((r1 - r3)*(r2 - rm))
+    hr = (r1 - r2) / (r1 - r3)
+    hp = ((r1 - r2) * (r3 - rp)) / ((r1 - r3) * (r2 - rp))
+    hm = ((r1 - r2) * (r3 - rm)) / ((r1 - r3) * (r2 - rm))
 
-    return  (-((En * ((-4*(r2 - r3)*(-(((-2*aa**2 + (4 - (aa*Lz)/En)*rm)*
-            ((qr*ellippi(hm,kr))/pi - ellippi(hm,psi_r,kr)))/
-            ((r2 - rm)*(r3 - rm))) + 
-            ((-2*aa**2 + (4 - (aa*Lz)/En)*rp)*
-            ((qr*ellippi(hp,kr))/pi - ellippi(hp,psi_r,kr)))/
-            ((r2 - rp)*(r3 - rp))))/(-rm + rp) + 
-            4*(r2 - r3)*((qr*ellippi(hr,kr))/pi - ellippi(hr,psi_r,kr)) + 
-            (r2 - r3)*(r1 + r2 + r3 + r4)*
-            ((qr*ellippi(hr,kr))/pi - ellippi(hr,psi_r,kr)) + 
-            (r1 - r3)*(r2 - r4)*((qr*ellipe(kr))/pi - ellipe(psi_r,kr) + 
-            (hr*cos(psi_r)*sin(psi_r)*sqrt(1 - kr*sin(psi_r)**2))/
-            (1 - hr*sin(psi_r)**2))))/sqrt((1 - En**2)*(r1 - r3)*(r2 - r4))))
+    return -(
+        (
+            En
+            * (
+                (
+                    -4
+                    * (r2 - r3)
+                    * (
+                        -(
+                            (
+                                (-2 * aa ** 2 + (4 - (aa * Lz) / En) * rm)
+                                * ((qr * ellippi(hm, kr)) / pi - ellippi(hm, psi_r, kr))
+                            )
+                            / ((r2 - rm) * (r3 - rm))
+                        )
+                        + (
+                            (-2 * aa ** 2 + (4 - (aa * Lz) / En) * rp)
+                            * ((qr * ellippi(hp, kr)) / pi - ellippi(hp, psi_r, kr))
+                        )
+                        / ((r2 - rp) * (r3 - rp))
+                    )
+                )
+                / (-rm + rp)
+                + 4 * (r2 - r3) * ((qr * ellippi(hr, kr)) / pi - ellippi(hr, psi_r, kr))
+                + (r2 - r3)
+                * (r1 + r2 + r3 + r4)
+                * ((qr * ellippi(hr, kr)) / pi - ellippi(hr, psi_r, kr))
+                + (r1 - r3)
+                * (r2 - r4)
+                * (
+                    (qr * ellipe(kr)) / pi
+                    - ellipe(psi_r, kr)
+                    + (hr * cos(psi_r) * sin(psi_r) * sqrt(1 - kr * sin(psi_r) ** 2))
+                    / (1 - hr * sin(psi_r) ** 2)
+                )
+            )
+        )
+        / sqrt((1 - En ** 2) * (r1 - r3) * (r2 - r4))
+    )
 
 
 def calc_phi_r(qr, r1, r2, r3, r4, En, Lz, aa, M=1):
@@ -150,20 +177,34 @@ def calc_phi_r(qr, r1, r2, r3, r4, En, Lz, aa, M=1):
     """
     pi = mp.pi
     psi_r = calc_psi_r(qr, r1, r2, r3, r4)
-    kr = ((r1 - r2)*(r3 - r4))/((r1 - r3)*(r2 - r4))
-    rp = M + sqrt(-aa**2 + M**2)
-    rm = M - sqrt(-aa**2 + M**2)
+    kr = ((r1 - r2) * (r3 - r4)) / ((r1 - r3) * (r2 - r4))
+    rp = M + sqrt(-(aa ** 2) + M ** 2)
+    rm = M - sqrt(-(aa ** 2) + M ** 2)
 
-    hp = ((r1 - r2)*(r3 - rp))/((r1 - r3)*(r2 - rp))
-    hm = ((r1 - r2)*(r3 - rm))/((r1 - r3)*(r2 - rm))
+    hp = ((r1 - r2) * (r3 - rp)) / ((r1 - r3) * (r2 - rp))
+    hm = ((r1 - r2) * (r3 - rm)) / ((r1 - r3) * (r2 - rm))
 
-    return ((2*aa*En*(-(((r2 - r3)*(-((aa*Lz)/En) + 2*rm)*
-            ((qr*ellippi(hm,kr))/pi - ellippi(hm,psi_r,kr)))/
-            ((r2 - rm)*(r3 - rm))) + 
-            ((r2 - r3)*(-((aa*Lz)/En) + 2*rp)*
-            ((qr*ellippi(hp,kr))/pi - ellippi(hp,psi_r,kr)))/
-            ((r2 - rp)*(r3 - rp))))/
-            (sqrt((1 - En**2)*(r1 - r3)*(r2 - r4))*(-rm + rp)))
+    return (
+        2
+        * aa
+        * En
+        * (
+            -(
+                (
+                    (r2 - r3)
+                    * (-((aa * Lz) / En) + 2 * rm)
+                    * ((qr * ellippi(hm, kr)) / pi - ellippi(hm, psi_r, kr))
+                )
+                / ((r2 - rm) * (r3 - rm))
+            )
+            + (
+                (r2 - r3)
+                * (-((aa * Lz) / En) + 2 * rp)
+                * ((qr * ellippi(hp, kr)) / pi - ellippi(hp, psi_r, kr))
+            )
+            / ((r2 - rp) * (r3 - rp))
+        )
+    ) / (sqrt((1 - En ** 2) * (r1 - r3) * (r2 - r4)) * (-rm + rp))
 
 
 def calc_psi_z(qz, zp, zm, En, aa):
@@ -180,8 +221,8 @@ def calc_psi_z(qz, zp, zm, En, aa):
     Returns:
         psi_z (float)
     """
-    ktheta = (aa**2*(1 - En**2)*zm**2)/zp**2
-    return am((2*(pi/2. + qz)*ellipk(ktheta))/pi, ktheta)
+    ktheta = (aa ** 2 * (1 - En ** 2) * zm ** 2) / zp ** 2
+    return am((2 * (pi / 2.0 + qz) * ellipk(ktheta)) / pi, ktheta)
 
 
 def calc_t_z(qz, zp, zm, En, aa):
@@ -199,9 +240,10 @@ def calc_t_z(qz, zp, zm, En, aa):
         t_z (float)
     """
     psi_z = calc_psi_z(qz, zp, zm, En, aa)
-    ktheta = (aa**2*(1 - En**2)*zm**2)/zp**2
-    return ((En*zp*((2*(pi/2. + qz)*ellipe(ktheta))/pi - ellipe(psi_z,ktheta)))/
-            (1 - En**2))
+    ktheta = (aa ** 2 * (1 - En ** 2) * zm ** 2) / zp ** 2
+    return (
+        En * zp * ((2 * (pi / 2.0 + qz) * ellipe(ktheta)) / pi - ellipe(psi_z, ktheta))
+    ) / (1 - En ** 2)
 
 
 def calc_phi_z(qz, zp, zm, En, Lz, aa):
@@ -220,9 +262,17 @@ def calc_phi_z(qz, zp, zm, En, Lz, aa):
         phi_z (float)
     """
     psi_z = calc_psi_z(qz, zp, zm, En, aa)
-    ktheta = (aa**2*(1 - En**2)*zm**2)/zp**2
-    return (-((Lz*((2*(pi/2. + qz)*ellippi(zm**2,ktheta))/pi - 
-            ellippi(zm**2,psi_z,ktheta)))/zp))
+    ktheta = (aa ** 2 * (1 - En ** 2) * zm ** 2) / zp ** 2
+    return -(
+        (
+            Lz
+            * (
+                (2 * (pi / 2.0 + qz) * ellippi(zm ** 2, ktheta)) / pi
+                - ellippi(zm ** 2, psi_z, ktheta)
+            )
+        )
+        / zp
+    )
 
 
 def calc_Ct(qr0, qz0, r1, r2, r3, r4, zp, zm, En, Lz, aa):
@@ -275,8 +325,9 @@ def calc_Cz(qr0, qz0, r1, r2, r3, r4, zp, zm, En, Lz, aa):
     return phi_r + phi_z
 
 
-def calc_t(mino_t, ups_r, ups_theta, gamma, qt0, qr0, qz0, r1, r2, r3, r4, zp,
-           zm, En, Lz, aa):
+def calc_t(
+    mino_t, ups_r, ups_theta, gamma, qt0, qr0, qz0, r1, r2, r3, r4, zp, zm, En, Lz, aa
+):
     """
     time geodesic coordinate
 
@@ -359,8 +410,24 @@ def calc_theta(mino_t, ups_theta, qz0, zp, zm, En, aa):
     return acos(calc_zq(eta, zp, zm, En, aa))
 
 
-def calc_phi(mino_t, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2, r3,
-             r4, zp, zm, En, Lz, aa):
+def calc_phi(
+    mino_t,
+    ups_r,
+    ups_theta,
+    ups_phi,
+    qphi0,
+    qr0,
+    qz0,
+    r1,
+    r2,
+    r3,
+    r4,
+    zp,
+    zm,
+    En,
+    Lz,
+    aa,
+):
     """
     phi in terms of Mino time
 
@@ -418,14 +485,14 @@ def calc_lambda_r(r, r1, r2, r3, r4, En):
     Returns:
         lambda (float)
     """
-    kr = ((r1 - r2)*(r3 - r4))/((r1 - r3)*(r2 - r4))
+    kr = ((r1 - r2) * (r3 - r4)) / ((r1 - r3) * (r2 - r4))
     # if r1 == r2:
     #     # circular orbit
     #     print('Circular orbits currently do not work.')
     #     return 0
     yr = sqrt(((r - r2) * (r1 - r3)) / ((r1 - r2) * (r - r3)))
     F_asin = ellipf(asin(yr), kr)
-    return (2*F_asin)/(sqrt(1 - En * En)*sqrt((r1 - r3)*(r2 - r4)))
+    return (2 * F_asin) / (sqrt(1 - En * En) * sqrt((r1 - r3) * (r2 - r4)))
 
 
 def calc_lambda_psi(psi, ups_r, r1, r2, r3, r4, En, slr, ecc):
@@ -505,20 +572,19 @@ def calc_wtheta(chi, ups_theta, En, Lz, aa, slr, x):
         w_theta (float)
     """
     pi = mp.pi
-    if (chi >= 0 and chi <= pi / 2):
+    if chi >= 0 and chi <= pi / 2:
         return ups_theta * calc_lambda_0(chi, zp, zm, En, Lz, aa, slr, x)
-    elif (chi > pi / 2 and chi <= pi):
-        return pi - ups_theta * calc_lambda_0(pi - chi, zp, zm, En, Lz, aa,
-                                              slr, x)
-    elif (chi > pi and chi <= 3 * pi / 2):
-        return pi + ups_theta * calc_lambda_0(chi - pi, zp, zm, En, Lz, aa,
-                                              slr, x)
-    elif (chi > 3 * pi / 2 and chi <= 2 * pi):
-        return (2 * pi - ups_theta *
-                calc_lambda_0(2 * pi - chi, zp, zm, En, Lz, aa, slr, x))
+    elif chi > pi / 2 and chi <= pi:
+        return pi - ups_theta * calc_lambda_0(pi - chi, zp, zm, En, Lz, aa, slr, x)
+    elif chi > pi and chi <= 3 * pi / 2:
+        return pi + ups_theta * calc_lambda_0(chi - pi, zp, zm, En, Lz, aa, slr, x)
+    elif chi > 3 * pi / 2 and chi <= 2 * pi:
+        return 2 * pi - ups_theta * calc_lambda_0(
+            2 * pi - chi, zp, zm, En, Lz, aa, slr, x
+        )
     else:
         print("Something went wrong in calc_wtheta!")
-        return 0.  # this case should not occur, but is required by C++
+        return 0.0  # this case should not occur, but is required by C++
 
 
 def calc_dwtheta_dchi(chi, zp, zm):
@@ -535,8 +601,8 @@ def calc_dwtheta_dchi(chi, zp, zm):
     """
     pi = mp.pi
     k = sqrt(zm / zp)
-    ellipticK_k = ellipk(k**2)
-    return pi / (2 * ellipticK_k) * (1 / (1 - k * k * cos(chi)**2))
+    ellipticK_k = ellipk(k ** 2)
+    return pi / (2 * ellipticK_k) * (1 / (1 - k * k * cos(chi) ** 2))
 
 
 def calc_wr(psi, ups_r, r1, r2, r3, r4, En, slr, ecc):
@@ -570,17 +636,42 @@ def calc_J(chi, En, Lz, Q, aa, slr, ecc):
     eta = 1 + ecc * cos(chi)
     eta2 = eta * eta
 
-    J = ((1 - ecc2)*(1 - En2) + 2*(1 - En2 - (1 - ecc2)/slr)*eta + 
-        (((3 + ecc2)*(1 - En2))/(1 - ecc2) + 
-        ((1 - ecc2)*(aa2*(1 - En2) + Lz2 + Q))/slr2 - 4/slr)*
-        eta2)
+    J = (
+        (1 - ecc2) * (1 - En2)
+        + 2 * (1 - En2 - (1 - ecc2) / slr) * eta
+        + (
+            ((3 + ecc2) * (1 - En2)) / (1 - ecc2)
+            + ((1 - ecc2) * (aa2 * (1 - En2) + Lz2 + Q)) / slr2
+            - 4 / slr
+        )
+        * eta2
+    )
 
     return J
 
 
-def calc_equatorial_coords(psi, ups_r, ups_theta, ups_phi, gamma, r1, r2, r3,
-                              r4, zp, zm, En, Lz, aa, slr, ecc, qt0=0,
-                              qr0=0, qz0=0, qphi0=0):
+def calc_equatorial_coords(
+    psi,
+    ups_r,
+    ups_theta,
+    ups_phi,
+    gamma,
+    r1,
+    r2,
+    r3,
+    r4,
+    zp,
+    zm,
+    En,
+    Lz,
+    aa,
+    slr,
+    ecc,
+    qt0=0,
+    qr0=0,
+    qz0=0,
+    qphi0=0,
+):
     """
     Computes all equatorial coordinates in a convenient function
 
@@ -616,44 +707,176 @@ def calc_equatorial_coords(psi, ups_r, ups_theta, ups_phi, gamma, r1, r2, r3,
     """
     pi = mp.pi
     if zm != 0:
-        print('The orbit specified is not equatorial.')
+        print("The orbit specified is not equatorial.")
     r, lam_psi = calc_lambda_psi(psi, ups_r, r1, r2, r3, r4, En, slr, ecc)
-    t = calc_t(lam_psi, ups_r, ups_theta, gamma, qt0, qr0, qz0, r1, r2, r3, r4,
-               zp, zm, En, Lz, aa)
+    t = calc_t(
+        lam_psi,
+        ups_r,
+        ups_theta,
+        gamma,
+        qt0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     theta = pi / 2
-    phi = calc_phi(lam_psi, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2,
-                   r3, r4, zp, zm, En, Lz, aa)
+    phi = calc_phi(
+        lam_psi,
+        ups_r,
+        ups_theta,
+        ups_phi,
+        qphi0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     return t, r, theta, phi
 
 
 def calc_dwr_dpsi(psi, ups_r, En, Lz, Q, aa, slr, ecc):
     J = calc_J(psi, En, Lz, Q, aa, slr, ecc)
-    return (1 - ecc**2) / slr * ups_r / sqrt(J)
+    return (1 - ecc ** 2) / slr * ups_r / sqrt(J)
 
 
-def calc_gen_coords_mino(mino_t, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2, r3,
-                         r4, zp, zm, En, Lz, aa):
-    t = calc_t(mino_t, ups_r, ups_theta, gamma, qt0, qr0, qz0, r1, r2, r3, r4, zp,
-               zm, En, Lz, aa)
+def calc_gen_coords_mino(
+    mino_t,
+    ups_r,
+    ups_theta,
+    ups_phi,
+    qphi0,
+    qr0,
+    qz0,
+    r1,
+    r2,
+    r3,
+    r4,
+    zp,
+    zm,
+    En,
+    Lz,
+    aa,
+):
+    t = calc_t(
+        mino_t,
+        ups_r,
+        ups_theta,
+        gamma,
+        qt0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     r = calc_r(mino_t, ups_r, qr0, r1, r2, r3, r4)
     theta = calc_theta(mino_t, ups_theta, qz0, zp, zm, En, aa)
-    phi = calc_phi(mino_t, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2, r3,
-                   r4, zp, zm, En, Lz, aa)
+    phi = calc_phi(
+        mino_t,
+        ups_r,
+        ups_theta,
+        ups_phi,
+        qphi0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     return t, r, theta, phi
 
 
-def calc_gen_coords(psi, chi, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2, r3,
-                    r4, zp, zm, En, Lz, aa, slr, ecc, x):
+def calc_gen_coords(
+    psi,
+    chi,
+    ups_r,
+    ups_theta,
+    ups_phi,
+    qphi0,
+    qr0,
+    qz0,
+    r1,
+    r2,
+    r3,
+    r4,
+    zp,
+    zm,
+    En,
+    Lz,
+    aa,
+    slr,
+    ecc,
+    x,
+):
     wr = calc_wr(psi, ups_r, r1, r2, r3, r4, En, slr, ecc)
     wtheta = calc_wtheta(chi, ups_theta, En, Lz, aa, slr, x)
     # TODO (aaron): check that the following are equal
     print(wr / ups_r)
     print(wtheta / ups_theta)
     mino_t = wr / ups_r
-    t = calc_t(mino_t, ups_r, ups_theta, gamma, qt0, qr0, qz0, r1, r2, r3, r4, zp,
-               zm, En, Lz, aa)
+    t = calc_t(
+        mino_t,
+        ups_r,
+        ups_theta,
+        gamma,
+        qt0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     r = calc_r(mino_t, ups_r, qr0, r1, r2, r3, r4)
     theta = calc_theta(mino_t, ups_theta, qz0, zp, zm, En, aa)
-    phi = calc_phi(mino_t, ups_r, ups_theta, ups_phi, qphi0, qr0, qz0, r1, r2, r3,
-                   r4, zp, zm, En, Lz, aa)
+    phi = calc_phi(
+        mino_t,
+        ups_r,
+        ups_theta,
+        ups_phi,
+        qphi0,
+        qr0,
+        qz0,
+        r1,
+        r2,
+        r3,
+        r4,
+        zp,
+        zm,
+        En,
+        Lz,
+        aa,
+    )
     return t, r, theta, phi

@@ -168,9 +168,21 @@ def gen_energy(zm, aa, slr, ecc, x):
 
         mp.prec += 10
         En = sqrt(
-            (kappa * rho + 2 * epsilon * sigma -
-             2 * sqrt((sigma * (-(eta * kappa2) + epsilon * kappa * rho +
-                      epsilon2 * sigma)) / x2) * x) / (rho2 + 4 * eta * sigma))
+            (
+                kappa * rho
+                + 2 * epsilon * sigma
+                - 2
+                * sqrt(
+                    (
+                        sigma
+                        * (-(eta * kappa2) + epsilon * kappa * rho + epsilon2 * sigma)
+                    )
+                    / x2
+                )
+                * x
+            )
+            / (rho2 + 4 * eta * sigma)
+        )
 
         return En
     finally:
@@ -210,8 +222,9 @@ def gen_ang_momentum(En, aa, slr, ecc, x):
         En2 = En * En
         x2 = x * x
         mp.prec += 10
-        Lz = ((-(En * gr1) + x * sqrt((-(dr1 * hr1) + En2 *
-                     (gr1 * gr1 + fr1 * hr1)) / x2)) / hr1)
+        Lz = (
+            -(En * gr1) + x * sqrt((-(dr1 * hr1) + En2 * (gr1 * gr1 + fr1 * hr1)) / x2)
+        ) / hr1
         return Lz
     finally:
         mp.prec = prec
@@ -241,8 +254,7 @@ def gen_carter_const(En, Lz, aa, slr, ecc, x):
         mp.prec += 10
         zm2 = zm * zm
         mp.prec += 10
-        return (zm2 * (aa * aa * (1 - En * En) + Lz * Lz /
-                (1 - zm2)))
+        return zm2 * (aa * aa * (1 - En * En) + Lz * Lz / (1 - zm2))
     finally:
         mp.prec = prec
 

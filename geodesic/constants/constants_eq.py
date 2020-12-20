@@ -32,18 +32,41 @@ def eq_energy(aa, slr, ecc, x):
         aa4 = aa2 * aa2
         aa6 = aa4 * aa2
         mp.prec += 10
-        return (
-            sqrt(
-                1 - (-eta * (1 + (eta * (aa2 * (1 + 3 * ecc2 + slr) +
-                     slr * (-3 - ecc2 + slr -
-                     2 * sqrt((aa6 * eta2 +
-                              aa2 * (-4 * ecc2 + (-2 + slr)**2) * slr**2 +
-                              2 * aa4 * slr * (-2 + slr + ecc2 * (2 + slr))) /
-                             (slr**3 * x**2)) * x))) /
-                    (-4 * aa2 * eta2 + (3 + ecc2 - slr)**2 * slr))) / slr)
+        return sqrt(
+            1
+            - (
+                -eta
+                * (
+                    1
+                    + (
+                        eta
+                        * (
+                            aa2 * (1 + 3 * ecc2 + slr)
+                            + slr
+                            * (
+                                -3
+                                - ecc2
+                                + slr
+                                - 2
+                                * sqrt(
+                                    (
+                                        aa6 * eta2
+                                        + aa2 * (-4 * ecc2 + (-2 + slr) ** 2) * slr ** 2
+                                        + 2 * aa4 * slr * (-2 + slr + ecc2 * (2 + slr))
+                                    )
+                                    / (slr ** 3 * x ** 2)
+                                )
+                                * x
+                            )
+                        )
+                    )
+                    / (-4 * aa2 * eta2 + (3 + ecc2 - slr) ** 2 * slr)
+                )
+            )
+            / slr
         )
     finally:
-        print('here')
+        print("here")
         mp.prec = prec
 
 
@@ -76,18 +99,28 @@ def eq_ang_momentum(aa, slr, ecc, x):
         slr3 = slr2 * slr
         x2 = x * x
         mp.prec += 10
-        num_root = slr * (-3 - ecc2 + slr - 2 *
-                          sqrt((aa6 * eta2 + aa2 *
-                               (-4 * ecc2 + (-2 + slr)**2) *
-                               slr2 + 2 * aa4 * slr *
-                               (-2 + slr + ecc2 * (2 + slr))) /
-                               (slr3 * x2)) * x)
-        denom = (-4 * aa2 * eta2 + (3 + ecc2 - slr)**2 * slr)
-        return (
-            slr * x *
-            sqrt((aa2 * (1 + 3 * ecc2 + slr) + num_root) / (denom * x2)) +
-            aa * sqrt(1 - (-eta * (1 + (eta * (aa2 * (1 + 3 * ecc2 + slr) +
-                      num_root)) / denom)) / slr)
+        num_root = slr * (
+            -3
+            - ecc2
+            + slr
+            - 2
+            * sqrt(
+                (
+                    aa6 * eta2
+                    + aa2 * (-4 * ecc2 + (-2 + slr) ** 2) * slr2
+                    + 2 * aa4 * slr * (-2 + slr + ecc2 * (2 + slr))
+                )
+                / (slr3 * x2)
+            )
+            * x
+        )
+        denom = -4 * aa2 * eta2 + (3 + ecc2 - slr) ** 2 * slr
+        return slr * x * sqrt(
+            (aa2 * (1 + 3 * ecc2 + slr) + num_root) / (denom * x2)
+        ) + aa * sqrt(
+            1
+            - (-eta * (1 + (eta * (aa2 * (1 + 3 * ecc2 + slr) + num_root)) / denom))
+            / slr
         )
     finally:
         mp.prec = prec
