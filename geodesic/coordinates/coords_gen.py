@@ -1,8 +1,10 @@
-from mpmath import sin, asin, cos, acos
-from mpmath import sqrt, ellipfun, floor
+from mpmath import sin, asin, cos, acos, mp, asinh
+from mpmath import sqrt, ellipfun, floor, pi, tan
 from mpmath import ellipk, ellipf, ellipe, ellippi
-from special_func import am
-
+try:
+    from special_func import am
+except:
+    from geodesic.coordinates.special_func import am
 
 def calc_radius(psi, slr, ecc):
     """
@@ -511,6 +513,7 @@ def calc_lambda_psi(psi, ups_r, r1, r2, r3, r4, En, slr, ecc):
         ecc (float): eccentricity
 
     Returns:
+        r (float): radius
         lambda_psi (float)
     """
     pi = mp.pi
@@ -555,7 +558,7 @@ def calc_lambda_0(chi, zp, zm, En, Lz, aa, slr, x):
     return prefactor * (ellipticK_k - ellipticF)
 
 
-def calc_wtheta(chi, ups_theta, En, Lz, aa, slr, x):
+def calc_wtheta(chi, ups_theta, zp, zm, En, Lz, aa, slr, x):
     """
     w_theta = ups_theta * lambda as a function of polar angle chi
 
@@ -605,10 +608,32 @@ def calc_dwtheta_dchi(chi, zp, zm):
     return pi / (2 * ellipticK_k) * (1 / (1 - k * k * cos(chi) ** 2))
 
 
-def calc_wr(psi, ups_r, r1, r2, r3, r4, En, slr, ecc):
-    lam = calc_lambda_psi(psi, ups_r, r1, r2, r3, r4, En, slr, ecc)
-    wr = ups_r * lam
-    return wr
+def calc_wr(psi, ups_r, En, Lz, Q, aa, slr, ecc, x):
+    """
+    Computes wr by analytic evaluation of the integral in Drasco and Hughes (2005)
+    """
+    a1 = (1 - ecc**2)*(1 - En**2)
+    b1 = 2*(1 - En**2 - (1 - ecc**2)/slr)
+    c1 = (((3 + ecc**2)*(1 - En**2))/(1 - ecc**2) - 4/slr + 
+          ((1 - ecc**2)*(aa**2*(1 - En**2) + Lz**2 + Q))/slr**2)
+
+    if psi == mp.pi:
+        # the closed form function has a singularity at psi = pi
+        # but it can be evaluated in integral form to be pi
+        return mp.pi
+    else:
+        return ((-2j*(1 - ecc**2)*ups_r*cos(psi/2.)**2*
+            ellipf(1j*asinh(sqrt((a1 - (-1 + ecc)*(b1 + c1 - c1*ecc))/
+                (a1 + b1 + c1 - c1*ecc**2 + sqrt((b1**2 - 4*a1*c1)*ecc**2)))*tan(psi/2.)),
+            (a1 + b1 + c1 - c1*ecc**2 + sqrt((b1**2 - 4*a1*c1)*ecc**2))/
+            (a1 + b1 + c1 - c1*ecc**2 - sqrt((b1**2 - 4*a1*c1)*ecc**2)))*
+            sqrt(2 + (2*(a1 - (-1 + ecc)*(b1 + c1 - c1*ecc))*tan(psi/2.)**2)/
+            (a1 + b1 + c1 - c1*ecc**2 - sqrt((b1**2 - 4*a1*c1)*ecc**2)))*
+            sqrt(1 + ((a1 - (-1 + ecc)*(b1 + c1 - c1*ecc))*tan(psi/2.)**2)/
+            (a1 + b1 + c1 - c1*ecc**2 + sqrt((b1**2 - 4*a1*c1)*ecc**2))))/
+        (sqrt((a1 - (-1 + ecc)*(b1 + c1 - c1*ecc))/
+            (a1 + b1 + c1 - c1*ecc**2 + sqrt((b1**2 - 4*a1*c1)*ecc**2)))*slr*
+            sqrt(2*a1 + 2*b1 + 2*c1 + c1*ecc**2 + 2*(b1 + 2*c1)*ecc*cos(psi) + c1*ecc**2*cos(2*psi))))
 
 
 def calc_J(chi, En, Lz, Q, aa, slr, ecc):
@@ -759,9 +784,7 @@ def calc_gen_coords_mino(
     ups_r,
     ups_theta,
     ups_phi,
-    qphi0,
-    qr0,
-    qz0,
+    gamma,
     r1,
     r2,
     r3,
@@ -771,6 +794,10 @@ def calc_gen_coords_mino(
     En,
     Lz,
     aa,
+    qphi0=0,
+    qr0=0,
+    qz0=0,
+    qt0=0,
 ):
     t = calc_t(
         mino_t,
@@ -815,13 +842,10 @@ def calc_gen_coords_mino(
 
 def calc_gen_coords(
     psi,
-    chi,
     ups_r,
     ups_theta,
     ups_phi,
-    qphi0,
-    qr0,
-    qz0,
+    gamma,
     r1,
     r2,
     r3,
@@ -830,16 +854,27 @@ def calc_gen_coords(
     zm,
     En,
     Lz,
+    Q,
     aa,
     slr,
     ecc,
     x,
+    qphi0=0,
+    qr0=0,
+    qz0=0,
+    qt0=0,
 ):
-    wr = calc_wr(psi, ups_r, r1, r2, r3, r4, En, slr, ecc)
-    wtheta = calc_wtheta(chi, ups_theta, En, Lz, aa, slr, x)
+    wr = calc_wr(psi, ups_r, En, Lz, Q, aa, slr, ecc, x)
+    wr = wr.real  # this should be a real value
+    # wtheta = calc_wtheta(chi, ups_theta, zp, zm, En, Lz, aa, slr, x)
+    # when evaluating the orbit, we do not separate theta and r directions
+    # when evaluating the flux integral, we will
+    wtheta = (ups_theta / ups_r) * wr
     # TODO (aaron): check that the following are equal
-    print(wr / ups_r)
-    print(wtheta / ups_theta)
+    # print('lambdar =', wr / ups_r)
+    # print('wr =', wr)
+    # print('wtheta =', wtheta)
+    # print('lambdatheta =', wtheta / ups_theta)
     mino_t = wr / ups_r
     t = calc_t(
         mino_t,

@@ -1,4 +1,4 @@
-from mpmath import mp
+from mpmath import mp, sqrt
 
 
 def radial_roots(En, Q, aa, slr, ecc, M=1):

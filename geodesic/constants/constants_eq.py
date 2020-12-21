@@ -66,7 +66,6 @@ def eq_energy(aa, slr, ecc, x):
             / slr
         )
     finally:
-        print("here")
         mp.prec = prec
 
 
